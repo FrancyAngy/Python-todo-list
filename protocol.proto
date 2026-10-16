@@ -1,0 +1,66 @@
+syntax = "proto3";
+package francyangy.pytodo;
+
+import "google/protobuf/empty.proto";
+
+enum Filter {
+  FILTER_NONE_UNSPECIFIED = 0;
+  FILTER_NOT_DONE = 1;
+  FILTER_DONE = 2;
+}
+
+service TodoService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc GetTodo(GetTodoRequest) returns (GetTodoResponse);
+  rpc GetTodos(GetTodosRequest) returns (GetTodosResponse);
+  rpc CreateTodo(CreateTodoRequest) returns (GetTodoResponse);
+  rpc EditTodo(EditTodoRequest) returns (GetTodoResponse);
+  rpc DeleteTodo(DeleteTodoRequest) returns (google.protobuf.Empty);
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message CreateUserResponse {
+  string token = 1;
+}
+
+message GetTodoRequest {
+  string token = 1;
+  uint64 id = 2;
+}
+
+message GetTodoResponse {
+  uint64 id = 1;
+  string name = 2;
+  bool done = 3;
+  optional string description = 4;
+}
+
+message GetTodosRequest {
+  string token = 1;
+  Filter filter = 2;
+}
+
+message GetTodosResponse {
+  repeated GetTodoResponse todos = 1;
+}
+
+message CreateTodoRequest {
+  string token = 1;
+  string name = 2;
+  optional string description = 3;
+}
+
+message EditTodoRequest {
+  string token = 1;
+  uint64 id = 2;
+  bool done = 3;
+}
+
+message DeleteTodoRequest {
+  string token = 1;
+  uint64 id = 2;
+}
